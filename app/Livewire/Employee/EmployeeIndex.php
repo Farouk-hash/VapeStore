@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Employee;
 
+use App\Models\Admin;
 use App\Models\Sales;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -16,7 +17,6 @@ class EmployeeIndex extends Component
     
     private function initializeEmployees(){
         $this->salesPersons = Sales::with(['admin'])->get(); 
-
     }
     
     public function changeActivation($id){

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Bills\Bills;
 use App\Models\Employee\Attendance;
 use App\Models\Employee\History;
+use App\Models\Image\Image;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -26,19 +27,26 @@ class Sales extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function images(){
+        return $this->morphMany(Image::class , 'imageable');
+    }
     public function admin(){
         return $this->belongsTo(Admin::class , 'admin_id');
     }
     public function history(){
         return $this->hasMany(History::class , 'sales_id');
     }
-    public function attendance(){
-        return $this->hasMany(Attendance::class ,'sales_id');
-    }
+    
     public function bills(){
         return $this->morphMany(Bills::class , 'created_by');
     }
+    
     public function customers(){
         return $this->morphMany(Customer::class,'created_by');
+    }
+    public function attendances()
+    {
+        return $this->morphMany(Attendance::class, 'attendable');
     }
 }

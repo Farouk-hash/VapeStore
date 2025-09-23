@@ -5,13 +5,11 @@ use App\Http\Controllers\dashboard\BrandsController;
 use App\Http\Controllers\dashboard\CartridgesController;
 use App\Http\Controllers\dashboard\CoilsController;
 use App\Http\Controllers\dashboard\ComponentsController;
-use App\Http\Controllers\dashboard\CustomersController;
 use App\Http\Controllers\dashboard\DevicesCategoriesController;
-use App\Http\Controllers\dashboard\EmployeeController;
 use App\Http\Controllers\dashboard\FlavoursController;
 use App\Http\Controllers\dashboard\LiquidController;
 use App\Http\Controllers\dashboard\TanksController;
-use App\Http\Controllers\ProfileController;
+use \App\Http\Controllers\dashboard\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -31,7 +29,7 @@ Route::prefix('dashboard')->middleware(['auth:admin'])->group(function(){
 
     // Employees , Customers ;
     // Route::resource('employee',EmployeeController::class);
-    Route::resource('customers',CustomersController::class);
+    // Route::resource('customers',CustomersController::class);
     
     // BILLS-DETAILS ; 
     // Route::resource('bills',BillsController::class);
@@ -68,22 +66,17 @@ Route::prefix('dashboard')->middleware(['auth:admin'])->group(function(){
 // ADMIN , SALES [ONLY];
 Route::prefix('dashboard')->middleware(['auth:admin,sales'])->group(function(){
     // Livewire Routes;
-    Route::get('liquid-selector',function(){
-        return view('livewire.sales.main');
-    })->name('livewire.liquid-selector');
+    Route::get('liquid-selector',fn()=> view('livewire.sales.main'))->name('livewire.liquid-selector');
+    Route::get('reports',fn()=>view('livewire.reports.index'))->name('livewire.reports');
+    Route::get('groups/{groupId?}',fn($groupId=null)=>view('livewire.group-inventories.index',['forceDetails'=>$groupId]))->name('livewire.group-inventories');
+    
+    Route::get('customers/{customerID?}',fn($customerID=null)=>view('livewire.customers.main',['forceDetails'=>$customerID]))->name('livewire.customers');
+    Route::get('employee',fn()=>view('livewire.employee.index'))->name('livewire.employee');
+    Route::get('profile',fn()=>view('livewire.profile.main'))->name('dashboard.profile');
 
-    Route::get('reports',function(){
-        return view('livewire.reports.index');
-    })->name('livewire.reports');
-
-    Route::get('groups/{groupId?}',function($groupId=null){
-        return view('livewire.group-inventories.index',['forceDetails'=>$groupId]);
-    })->name('livewire.group-inventories');
-
-    Route::get('employeelivewiretest',function(){
-        return view('livewire.employee.index');
-    })->name('livewire.employee');
+    // // END OF LIVEWIRE-ROUTES ; 
 });
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');

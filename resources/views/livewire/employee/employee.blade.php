@@ -1,7 +1,3 @@
-@section('css')
-    @stack('styles')
-@endsection
-
 <div>
     <div class="mb-4">
         <button class="btn btn-success btn-lg px-4 shadow-sm" wire:click="toggleCreateOrBack">

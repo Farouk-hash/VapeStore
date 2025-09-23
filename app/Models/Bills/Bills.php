@@ -34,6 +34,7 @@ class Bills extends Model
         return $this->belongsTo(Customer::class , 'customer_id');
     }
 
+    // Can be created by Admins , Employees[Sales] ; 
     public function created_by(){
         return $this->morphTo();
     }

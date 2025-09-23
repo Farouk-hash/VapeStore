@@ -11,7 +11,11 @@
 				<div class="app-sidebar__user clearfix">
 					<div class="dropdown user-pro-body">
 						<div class="">
-							<img alt="user-img" class="avatar avatar-xl brround" src="{{URL::asset('dashboard/img/faces/6.jpg')}}"><span class="avatar-status profile-status bg-green"></span>
+							
+							<img src="{{ \App\Helpers\ImageHelper::getUserImageUrlWithFallback() }}" class="avatar avatar-xl brround"  alt="Profile">
+
+							<span class="avatar-status profile-status bg-green"></span>
+							
 						</div>
 						<div class="user-info">
 							<h4 class="font-weight-semibold mt-3 mb-0">{{Auth::user()->name}}</h4>
@@ -89,9 +93,12 @@
 							</a>
 						<ul class="slide-menu">							
 							<li><a class="slide-item" href="{{ route('livewire.employee') }}">الموظفين</a></li>
-							
+							<li><a class="slide-item" href="{{ route('livewire.customers') }}">العملاء</a></li>
+
 							{{-- <li><a class="slide-item" href="{{ route('employee.index') }}">الموظفين</a></li> --}}
-							<li><a class="slide-item" href="{{ route('customers.index') }}">العملاء</a></li>
+							{{-- <li><a class="slide-item" href="{{ route('customers.index') }}">العملاء</a></li> --}}
+
+							
 							<li><a class="slide-item" href="{{ route('bills.index') }}">الفواتير</a></li>
 
 							<li><a class="slide-item" href="{{ route('livewire.group-inventories') }}">العروض</a></li>

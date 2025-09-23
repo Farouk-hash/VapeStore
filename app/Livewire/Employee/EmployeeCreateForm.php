@@ -3,12 +3,18 @@
 namespace App\Livewire\Employee;
 
 use App\Models\Sales;
+use App\Traits\UploadingImageTraits;
+use Exception;
 use Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EmployeeCreateForm extends Component
 {
+    use WithFileUploads , UploadingImageTraits;
+
     public $name , $email  , $phone , $password, $password_confirmation , $nationalID , $bioData , $image ;
     public $showExCreateForm = false , $employmentHistory=[] ; 
 
@@ -22,20 +28,40 @@ class EmployeeCreateForm extends Component
 
 
     public function create(){
-        $validated = $this->validate();
-        
-        // Create sales user
-        $salesPerson = Sales::create([
-            'name'       => $validated['name'],
-            'email'      => $validated['email'],
-            'phone'      => $validated['phone'],
-            'nationalID' => $validated['nationalID'],
-            'password'   => Hash::make($validated['password']),
-            'bioData'    => $this->bioData,
-            'admin_id'=>Auth::id(),
-        ]);
-        $salesPerson->history()->createMany($this->employmentHistory ?? []);
-        $this->resetValues();
+        DB::beginTransaction();
+        try{
+            $validated = $this->validate();
+
+            // Create sales user
+            $salesPerson = Sales::create([
+                'name'       => $validated['name'],
+                'email'      => $validated['email'],
+                'phone'      => $validated['phone'],
+                'nationalID' => $validated['nationalID'],
+                'password'   => Hash::make($validated['password']),
+                'bioData'    => $this->bioData,
+                'admin_id'=>Auth::id(),
+            ]);
+            $salesPerson->history()->createMany($this->employmentHistory ?? []);
+            
+            $this->uploadImage(
+                $this->image,
+                'image',
+                'sales',
+                'public',
+                $salesPerson->id,
+                get_class($salesPerson),
+                'sales'
+            );
+
+            DB::commit();
+            $this->resetValues();
+            
+        }catch(Exception $e){
+            DB::rollBack();
+            dd($e->getMessage());
+        }
+       
     }
     private function resetValues(){
         $this->reset('name','email','phone','nationalID','password','bioData','employmentHistory','image');

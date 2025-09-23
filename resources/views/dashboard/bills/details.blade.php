@@ -257,7 +257,10 @@
 
                                 <p class="text-muted tx-13 mb-3">
                                     اسم العميل 
-                                    <a href="{{route('customers.show',$bill->customer->id)}}"><strong class="">{{ $bill->customer->name }}</strong></a>
+                                    <a 
+                                    href="{{route('livewire.customers',$bill->customer->id)}}"
+                                    >
+                                    <strong class="">{{ $bill->customer->name }}</strong></a>
                                 </p>
                                 <p class="text-muted tx-13 mb-3">
                                     رقم هاتف العميل <strong class="text-dark">{{ $bill->customer->phone }}</strong>

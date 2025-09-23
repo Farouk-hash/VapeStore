@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Bills\Bills;
+use App\Models\Image\Image;
 use Hash;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,10 @@ class Customer extends Authenticatable
         return $this->morphTo();
     }
 
+    public function images(){
+        return $this->morphMany(Image::class , 'imageable');
+    }
+    
     // adding attribute ;
     public function getBillsDetailsAttribute(){
         return [

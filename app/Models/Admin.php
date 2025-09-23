@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Bills\Bills;
+use App\Models\Employee\Attendance;
+use App\Models\Image\Image;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,29 +20,38 @@ class Admin extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+ 
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Employee had been created via admin ; 
     public function sales(){
         return $this->hasMany(Sales::class , 'admin_id');
     }
+
+    // Customer had been created via admin ; 
     public function customers(){
         return $this->morphMany(Customer::class , 'created_by');
+    }
+
+    public function bills(){
+        return $this->morphMany(Bills::class , 'created_by');
+    }
+    // Admin Attendances ;
+    public function attendances()
+    {
+        return $this->morphMany(Attendance::class, 'attendable');
+    }
+
+    public function images(){
+        return $this->morphMany(Image::class , 'imageable');
     }
 }

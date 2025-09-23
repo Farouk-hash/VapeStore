@@ -11,7 +11,8 @@ class Attendance extends Model
     use HasFactory;
     protected $table='sales_attendance';
     public $fillable=['sales_id','date','check_in','check_out'];
-    public function employee(){
-        return $this->belongsTo(Sales::class , 'sales_id');
-    }    
+    
+    public function attendable(){
+        return $this->morphTo();
+    }
 }
