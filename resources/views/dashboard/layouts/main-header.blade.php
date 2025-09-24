@@ -221,19 +221,19 @@
 										</div>
 									</div>
 									
-									<a class="dropdown-item" href="{{route('dashboard.profile')}}"><i class="bx bx-user-circle"></i>Profile</a>
-									<a class="dropdown-item" href=""><i class="bx bx-cog"></i> Edit Profile</a>
-
+									<a class="dropdown-item" href="{{route('dashboard.profile')}}"><i class="bx bx-user-circle"></i>الصفحه الشخصيه</a>
 									<a class="dropdown-item" href=""><i class="bx bxs-inbox"></i>Inbox</a>
 									<a class="dropdown-item" href=""><i class="bx bx-envelope"></i>Messages</a>
 
-									<a class="dropdown-item" href=""><i class="bx bx-slider-alt"></i> Account Settings</a>
+									<a class="dropdown-item" href=""><i class="bx bx-key"></i>تعديل كلمه المرور</a>
 
-									<form action="{{route('logout')}}" method="POST">
+									<form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
 										@csrf
-										<button type='submit'>تسجيل الخروج </button>	
+										<button type="submit" class="dropdown-item d-flex align-items-center">
+											<i class="bx bx-log-out"></i> تسجيل الخروج
+										</button>
 									</form>
-									
+																		
 								</div>
 							</div>
 							<div class="dropdown main-header-message right-toggle">

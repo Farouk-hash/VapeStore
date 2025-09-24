@@ -199,8 +199,7 @@ trait HandlesProfileLivewire
             imageable_type: get_class($this->user),
             request_input_variable: $this->guard
         );
-        $this->reset('image');
-        // dd('here');
+        $this->reset('image'); // Image Uploaded Immediately ; 
     }
 
 }

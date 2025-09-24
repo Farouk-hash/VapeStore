@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Bills\Bills;
 use App\Models\Employee\Attendance;
 use App\Models\Image\Image;
+use App\Notifications\CustomResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,6 +33,10 @@ class Admin extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function sendPasswordResetNotification($token){
+        return $this->notify(new CustomResetPassword($token , 'admin'));
+    }
+    
     // Employee had been created via admin ; 
     public function sales(){
         return $this->hasMany(Sales::class , 'admin_id');

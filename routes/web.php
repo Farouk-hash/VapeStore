@@ -73,7 +73,8 @@ Route::prefix('dashboard')->middleware(['auth:admin,sales'])->group(function(){
     Route::get('customers/{customerID?}',fn($customerID=null)=>view('livewire.customers.main',['forceDetails'=>$customerID]))->name('livewire.customers');
     Route::get('employee',fn()=>view('livewire.employee.index'))->name('livewire.employee');
     Route::get('profile',fn()=>view('livewire.profile.main'))->name('dashboard.profile');
-
+    
+    Route::get('liquidLivewire',fn()=>view('livewire.liquids-brands.main'))->name('livewire.liquids');
     // // END OF LIVEWIRE-ROUTES ; 
 });
 

@@ -1,18 +1,37 @@
 @extends('dashboard.layouts.master2')
 @section('css')
-<!-- Sidemenu-respoansive-tabs css -->
-<link href="{{URL::asset('dashboard/plugins/sidemenu-responsive-tabs/css/sidemenu-responsive-tabs.css')}}" rel="stylesheet">
+<style>
+#login-image {
+    transition: opacity 0.6s ease-in-out;
+}
+#login-image.loaded {
+    opacity: 1 !important;
+}
+#image-loader.fade-out {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: none;
+}
+</style>
 @endsection
 @section('content')
 		<div class="container-fluid">
 			<div class="row no-gutter">
-				<!-- The image half -->
-				<div class="col-md-6 col-lg-6 col-xl-7 d-none d-md-flex bg-primary-transparent">
-					<div class="row wd-100p mx-auto text-center">
-						<div class="col-md-12 col-lg-12 col-xl-12 my-auto mx-auto wd-100p">
-							<img src="{{URL::asset('dashboard/img/media/login.png')}}" class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
+
+
+				<div class="col-md-6 col-lg-6 col-xl-7 d-none d-md-flex p-0 position-relative">
+					<!-- Loader -->
+					<div id="image-loader" class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+						<div class="spinner-border text-primary" role="status">
+							<span class="sr-only">Loading...</span>
 						</div>
 					</div>
+
+					<!-- Image -->
+					<img src="{{ URL::asset('dashboard/img/media/login.jpg') }}" 
+						class="w-100 h-100 object-fit-cover opacity-0" 
+						id="login-image"
+						alt="logo">
 				</div>
 				<!-- The content half -->
 				<div class="col-md-6 col-lg-6 col-xl-5 bg-white">
@@ -127,4 +146,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 @endsection
 @section('js')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+		
+    const img = document.getElementById("login-image");
+    const loader = document.getElementById("image-loader");
+
+    img.onload = function () {
+        img.classList.add("loaded");
+        loader.classList.add("fade-out");
+        setTimeout(() => loader.style.display = "none", 400); // remove after fade
+    };
+
+    // If already cached
+    if (img.complete) {
+        img.onload();
+    }
+});
+</script>
 @endsection

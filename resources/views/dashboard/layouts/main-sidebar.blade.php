@@ -42,10 +42,12 @@
 							</a>
 						<ul class="slide-menu">
 						<li><a class="slide-item" href="{{ route('brands.index') }}">الماركات</a></li>
+						
 						<li><a class="slide-item" href="{{ route('categories.index') }}">الفئات</a></li>
 						<li><a class="slide-item" href="{{ route('components.index') }}">المكونات</a></li>
 						<li><a class="slide-item" href="{{ route('flavours.index') }}">النكهات</a></li>
-
+						
+						<li><a class="slide-item" href="{{ route('livewire.liquids') }}">الماركات</a></li>
 							{{-- <li><a class="slide-item" href="{{ route('liquid.index') }}">Liquids</a></li> --}}
 
 						</ul>

@@ -859,6 +859,7 @@
                 <input type="number" class="flavor-form-input" id="customPg" placeholder="30" min="0" max="100">
             </div>
         </div>
+
     </div>
     
     <!-- Nicotine Strengths -->
@@ -878,6 +879,17 @@
         </div>
     </div>
     
+    <div class="flavor-form-section">
+        <h4 class="flavor-form-section-title">صور النكهة</h4>
+        <div class="flavor-form-group">
+            <label class="flavor-form-label">اختر الصور (يمكنك رفع أكثر من صورة)</label>
+            <input type="file" id="flavorImages" name="images[]" class="flavor-form-input" accept="image/*" multiple>
+            <div id="imagePreviewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
+        </div>
+    </div>
+
+
+
     <div class="flavor-form-actions">
         <button type="button" class="flavor-form-btn flavor-form-save" id="saveFlavorBtn">
             <i class="mdi mdi-check"></i> حفظ النكهة
@@ -1636,39 +1648,54 @@ $(document).on('click', '#saveFlavorBtn', function() {
     }
     
     showLoading($this, '<i class="mdi mdi-check"></i> حفظ النكهة');
-    
-    const formData = {
-        brand_id: {{ $brand->id }},
-        name: flavorName,
-        description: $('#flavorDescription').val().trim(),
-        vape_styles: selectedVapeStyles,
-        nicotine_types: selectedNicotineTypes,
-        vg_pg_ratio: vgPgRatio,
-        bottle_size_ml: bottleSize,
-        strengths: selectedStrengths,
-        _token: config.csrfToken
-    };
-    
-    $.ajax({
-        url: config.routes.addFlavour,
-        method: 'POST',
-        data: formData,
-        success: function(response) {
-            if (response.success) {
-                showSuccess('تم إضافة النكهة بنجاح');
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                showError(response.message || 'فشل إضافة النكهة');
-            }
-        },
-        error: function(xhr) {
-            console.error('Add Flavor Error:', xhr.responseText);
-            showError('حدث خطأ أثناء إضافة النكهة');
-        },
-        complete: function() {
-            hideLoading($this, '<i class="mdi mdi-check"></i> حفظ النكهة');
+
+// Create FormData object
+let formData = new FormData();
+
+formData.append('brand_id', {{ $brand->id }});
+formData.append('name', flavorName);
+formData.append('description', $('#flavorDescription').val().trim());
+formData.append('vg_pg_ratio', vgPgRatio);
+formData.append('bottle_size_ml', bottleSize);
+formData.append('_token', config.csrfToken);
+
+// Arrays -> either JSON.stringify or append one by one
+formData.append('vape_styles', JSON.stringify(selectedVapeStyles));
+formData.append('nicotine_types', JSON.stringify(selectedNicotineTypes));
+formData.append('strengths', JSON.stringify(selectedStrengths));
+
+// Append images
+let images = $('#flavorImages')[0].files;
+for (let i = 0; i < images.length; i++) {
+    formData.append('images[]', images[i]);
+}
+
+// Send via AJAX
+$.ajax({
+    url: config.routes.addFlavour,
+    method: 'POST',
+    data: formData,
+    processData: false,  // <-- MUST
+    contentType: false,  // <-- MUST
+    success: function(response) {
+        if (response.success) {
+            showSuccess('تم إضافة النكهة بنجاح');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showError(response.message || 'فشل إضافة النكهة');
         }
-    });
+    },
+    error: function(xhr) {
+        console.error('Add Flavor Error:', xhr.responseText);
+        showError('حدث خطأ أثناء إضافة النكهة');
+    },
+    complete: function() {
+        hideLoading($this, '<i class="mdi mdi-check"></i> حفظ النكهة');
+    }
+});
+
+
+
 });
 
 function resetFlavorForm() {

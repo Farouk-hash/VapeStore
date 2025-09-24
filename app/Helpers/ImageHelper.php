@@ -4,6 +4,8 @@ namespace App\Helpers;
 use App\Models\Image\Image;
 use Illuminate\Support\Facades\Auth;
 use URL;
+
+// FOR BLADES[User-profile , employees-profiles] ; 
 class ImageHelper{
  
     public static function getUserImageUrl($user = null): ?string

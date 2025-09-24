@@ -8,12 +8,14 @@ use App\Models\CommonModels\Component;
 use App\Models\Vape\Flavour;
 use App\Models\Vape\Liquid;
 use App\Models\Vape\LiquidNicStrength;
+use App\Traits\UploadingImageTraits;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class BrandsRepository implements brandsInterrface {
-
+    use UploadingImageTraits ; 
     public function index(){
         $brands = Brand::withCount('flavours')->get();
         return view('dashboard.brands.index',compact('brands'));
@@ -114,21 +116,40 @@ class BrandsRepository implements brandsInterrface {
     public function add_flavour(Request $request , int $brand_id){
        DB::beginTransaction();
        try{
-           // strengths: selectedStrengths,
-           $flavor = Flavour::create(['brand_id'=>$brand_id , 'name'=>$request->name]  );
-           $liquid = Liquid::create(['flavour_id'=>$flavor->id , 
-           'nicotine_type'=>$request->nicotine_types[0] , 
-           'vape_style'=>$request->vape_styles[0] ,
-           'vg_pg_ratio'=>$request->vg_pg_ratio , 'bottle_size_ml'=>$request->bottle_size_ml,
+
+        // strengths: selectedStrengths,
+            
+            $flavor = Flavour::where('brand_id',$brand_id)->where('name',$request->name)->first();
+            if(!$flavor){
+                $flavor = Flavour::create(['brand_id'=>$brand_id , 'name'=>$request->name]  );
+            }
+           Log::info('created');
+           $liquid = Liquid::create([
+           'flavour_id'=>$flavor->id , 
+           'nicotine_type'=>json_decode($request->nicotine_types , true)[0] , 
+           'vape_style'=>json_decode($request->vape_styles , true)[0] ,
+           'vg_pg_ratio'=>$request->vg_pg_ratio , 
+           'bottle_size_ml'=>$request->bottle_size_ml,
            ]);
-           $selectedStrengths = $request->strengths ?? [] ;
+           $selectedStrengths = json_decode($request->strengths , true) ?? [] ;
            foreach($selectedStrengths as $s){
                LiquidNicStrength::create(['liquid_id'=>$liquid->id , 'strength'=>$s]);
            } 
+        //    $images = $request->images ?? [];
+           $this->uploadImage(
+                source: $request->images,
+                input_name: 'images',
+                foldername: 'liquids' , 
+                disk: 'public',
+                imageable_id: $liquid->id,
+                imageable_type: get_class($liquid),
+                request_input_variable: 'name'
+            );
            DB::commit();
            return response()->json(['success' => true]);
        }catch(Exception $e){
             DB::rollBack();
+            Log::info("Error Occured While Inserting Liquids Via Brands:{$e->getMessage()}");
        }
     }
     

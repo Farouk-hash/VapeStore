@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Livewire\TemporaryUploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Log;
 
 trait UploadingImageTraits
 {
@@ -35,6 +36,7 @@ trait UploadingImageTraits
         // Case 1: Request (classic form)
         if ($source instanceof \Illuminate\Http\Request && $source->hasFile($input_name)) {
             $files = $source->file($input_name);
+            Log::info('instance Of');
         }
 
         // Case 2: Livewire property (single or multiple)
@@ -52,7 +54,7 @@ trait UploadingImageTraits
         }
 
         // Normalize files to array
-        if (!is_array($files)) {
+        if (!is_array($files) || $files instanceof UploadedFile) {
             $files = [$files];
         }
 

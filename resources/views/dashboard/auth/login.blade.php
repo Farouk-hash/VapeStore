@@ -1,16 +1,37 @@
 @extends('dashboard.layouts.master2')
 @section('css')
+<style>
+#login-image {
+    transition: opacity 0.6s ease-in-out;
+}
+#login-image.loaded {
+    opacity: 1 !important;
+}
+#image-loader.fade-out {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: none;
+}
+</style>
 @endsection
 @section('content')
 
 <div class="container-fluid">
 	<div class="row no-gutter">
-		<div class="col-md-6 col-lg-6 col-xl-7 d-none d-md-flex bg-primary-transparent">
-			<div class="row wd-100p mx-auto text-center">
-				<div class="col-md-12 col-lg-12 col-xl-12 my-auto mx-auto wd-100p">
-					<img src="{{URL::asset('dashboard/img/media/login.png')}}" class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
+		
+		<div class="col-md-6 col-lg-6 col-xl-7 d-none d-md-flex p-0 position-relative">
+			<!-- Loader -->
+			<div id="image-loader" class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+				<div class="spinner-border text-primary" role="status">
+					<span class="sr-only">Loading...</span>
 				</div>
 			</div>
+
+			<!-- Image -->
+			<img src="{{ URL::asset('dashboard/img/media/login.jpg') }}" 
+				class="w-100 h-100 object-fit-cover opacity-0" 
+				id="login-image"
+				alt="logo">
 		</div>
 
 		<!-- الجزء الخاص بالفورم -->
@@ -30,10 +51,15 @@
 									<div class="main-signup-header">
 										<h2>مرحباً بعودتك</h2>
 										<h5 class="font-weight-semibold mb-4">من فضلك قم بتسجيل الدخول</h5>
-
-										@error('failed')
-											<span style="color: red;">{{$message}}</span>	
-										@enderror
+										
+										@if($errors->has('failed'))
+										<div class="alert alert-danger">
+										<ul class="mb-0">
+											{{$errors->first('failed')}}
+										</div>
+										</ul>
+										@endif
+										
 
 										<div class="dropdown mb-3">
 											<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -50,7 +76,11 @@
 										<div id="login-type-heading" style="display: none; margin-top: 20px;">
 											<h3 class="text-primary">تسجيل الدخول كـ <span id="selected-login-type"></span></h3>
 										</div>
-
+										@if(session('status'))
+											<div class="alert alert-success">
+												{{ session('status') }}
+											</div>
+										@endif
 										<form method="POST" action="{{ route('login') }}">
 											@csrf
 											<input type="hidden" name="guard" id="selected-guard">
@@ -67,9 +97,12 @@
 
 											<button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
 										</form>
+
 										<div class="main-signup-footer mt-5">
-											<p>ليس حساب بالفعل: <a href="{{route('register')}}">انشاء حساب</a></p>
+											<p>ليس لديك حساب : <a href="{{route('register')}}">انشاء حساب</a></p>
+											<p>نسيت كلمه المرور : <a href="{{route('password.request')}}">تعديل </a></p>
 										</div>
+
 									</div>
 								</div>
 							</div>
@@ -85,6 +118,25 @@
 @section('js')
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+		
+    const img = document.getElementById("login-image");
+    const loader = document.getElementById("image-loader");
+
+    img.onload = function () {
+        img.classList.add("loaded");
+        loader.classList.add("fade-out");
+        setTimeout(() => loader.style.display = "none", 400); // remove after fade
+    };
+
+    // If already cached
+    if (img.complete) {
+        img.onload();
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+		
 	const dropdownItems = document.querySelectorAll(".dropdown-item");
 	const formDiv = document.getElementById("form");
 	const loginTypeHeading = document.getElementById("login-type-heading");
@@ -116,4 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 });
 </script>
+
+
+
 @endsection

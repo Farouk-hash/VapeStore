@@ -50,7 +50,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'failed'=>__('dashboard/login.failed')
+                'failed'=>'خطأ في تسجيل الدخول'
             ]);
         }
 
