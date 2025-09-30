@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('country');
             $table->string('logo')->nullable(); // brand logo
             $table->boolean('premium')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

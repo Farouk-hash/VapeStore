@@ -48,8 +48,6 @@
 						<li><a class="slide-item" href="{{ route('flavours.index') }}">النكهات</a></li>
 						
 						<li><a class="slide-item" href="{{ route('livewire.liquids') }}">الماركات</a></li>
-							{{-- <li><a class="slide-item" href="{{ route('liquid.index') }}">Liquids</a></li> --}}
-
 						</ul>
 					</li>
 					
@@ -60,6 +58,9 @@
 								<i class="fas fa-tools"></i><span class="side-menu__label" style="padding:8px;">الاجهزه</span>
 							</a>
 						<ul class="slide-menu">
+							<li><a class="slide-item" href="{{ route('livewire.devices') }}">
+							</span>الماركات</a></li>
+							
 							<?php 
 								$deviceCategories = App\Models\Hardware\DevicesCategories::where('hardware',true)
 								->withCount('devices')
@@ -69,7 +70,7 @@
 								<li><a class="slide-item" href="{{ route('devicesCategories.index' , [$deviceCategory->slug]) }}">
 									<span class="count-minimal">{{$deviceCategory->devices_count}}</span>{{$deviceCategory->name}}</a></li>
 							@endforeach
-						
+							
 						</ul>
 					</li>
 

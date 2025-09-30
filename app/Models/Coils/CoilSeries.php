@@ -5,6 +5,7 @@ namespace App\Models\Coils;
 use App\Models\Hardware\DeviceBrands;
 use App\Models\Hardware\DeviceInventories;
 use App\Models\Hardware\DevicesCategories;
+use App\Models\Image\Image;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +27,9 @@ class CoilSeries extends Model
 
     public function inventories(){
         return $this->hasMany(DeviceInventories::class , 'coil_series_id');
+    }
+    public function images(){
+        return $this->morphMany(Image::class , 'imageable');
     }
     public static function countByBrandAndStyle($brandId)
     {

@@ -79,7 +79,7 @@
                                                 <!-- Show Details Button -->
                                                 <button type="button" 
                                                         class="dropdown-item modal-effect text-warning" 
-                                                        {{-- onclick="window.location.href='{{ route('brands.show', $brand->id) }}'" --}}
+                                                        wire:click="showDetails({{$brand->id}})"
                                                         >
                                                     <i class="las la-eye"></i> عرض التفاصيل
                                                 </button>

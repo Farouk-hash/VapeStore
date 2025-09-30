@@ -60,6 +60,11 @@ class Index extends Component
 
     }
     
+    #[On('showDetailsEvent')]
+    public function showDetails($id){
+        return redirect()->route('livewire.details',$id);
+    }   
+
     public function render()
     {
         return view('livewire.liquids-brands.index');

@@ -75,6 +75,11 @@ Route::prefix('dashboard')->middleware(['auth:admin,sales'])->group(function(){
     Route::get('profile',fn()=>view('livewire.profile.main'))->name('dashboard.profile');
     
     Route::get('liquidLivewire',fn()=>view('livewire.liquids-brands.main'))->name('livewire.liquids');
+    Route::get('itemsDetails/{itemID}',fn($itemID)=>view('livewire.liquids-brands.items-details.main', ['itemID'=>$itemID]))->name('livewire.details');
+    
+    Route::get('devicesLivewire',fn()=>view('livewire.devices-brands.main',))->name('livewire.devices');
+    Route::get('devicesItemsDetails/{itemID}/{slug?}',fn($itemID , $slug=null)=>view('livewire.devices-brands.items-details.main',['itemID'=>$itemID , 'slug'=>$slug]))->name('livewire.devices.itemsDetails');
+    
     // // END OF LIVEWIRE-ROUTES ; 
 });
 

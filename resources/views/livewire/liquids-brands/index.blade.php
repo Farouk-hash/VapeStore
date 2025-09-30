@@ -14,12 +14,9 @@
             }}
         </button>
     </div>
-    
-    {{-- {{var_dump($editBrandForm , $showBrandsDetails , $showCreateBrandForm)}} --}}
+
     @if($editBrandForm)
         @livewire('liquids-brands.brands-edit-form',[$brandId])
-    @elseif($showBrandsDetails)
-        @livewire('liquids-brands.brands-details')
     @elseif($showCreateBrandForm)
         @livewire('liquids-brands.brands-create-form')
     @else

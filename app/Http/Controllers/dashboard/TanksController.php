@@ -20,7 +20,7 @@ class TanksController extends Controller
     public function show(int $tank_brand_id){
         
         $tanks = Tanks::with(['colors','speces','category','brand'])->where('brand_id',$tank_brand_id)->get();
-        $styleCounts = Tanks::countByBrandAndStyle($tank_brand_id);
+        $styleCounts = Tanks::countByBrandAndStyle(brandId: $tank_brand_id);
 
         return view('dashboard.tanks.tanks-brands-details',compact('tanks' , 'styleCounts'));
     }

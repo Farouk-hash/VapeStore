@@ -420,14 +420,14 @@
                                 <div class="stat-label">الألوان المتاحة</div>
                             </div>
                         </div>
-                       @foreach ($styleCounts as $styleCountKey =>$styleCountValue)
+                       {{-- @foreach ($styleCounts as $styleCountKey =>$styleCountValue)
                            <div class="col-md-4">
                                 <div class="stat-item">
                                     <div class="stat-number">{{ $styleCountValue }}</div>
                                     <div class="stat-label">{{$styleCountKey}}</div>
                                 </div>
                             </div>
-                       @endforeach
+                       @endforeach --}}
                         
                     </div>
                 </div>

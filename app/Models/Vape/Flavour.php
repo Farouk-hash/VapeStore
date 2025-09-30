@@ -4,6 +4,7 @@ namespace App\Models\Vape;
 
 use App\Models\CommonModels\Brand;
 use App\Models\CommonModels\Component;
+use App\Models\Image\Image;
 use \Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
 use Database\Factories\FlavourFactory;
@@ -37,6 +38,9 @@ class Flavour extends Model
     }
     public function liquids(){
         return $this->hasMany(Liquid::class);
+    }
+    public function images(){
+        return $this->morphMany(Image::class , 'imageable');
     }
     // SCOPES ; 
     public function scopeFlavourStatus($query , $status = true){

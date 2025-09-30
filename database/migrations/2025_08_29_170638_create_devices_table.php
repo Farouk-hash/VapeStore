@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('release_year')->nullable();
             $table->string('sku')->unique()->nullable();
             $table->boolean('is_available')->default(true);
-            
+            $table->longText('description')->nullable();
             $table->foreignId('brand_id')->constrained('device_brands')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('device_categories')->cascadeOnDelete();
             
