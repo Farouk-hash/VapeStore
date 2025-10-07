@@ -6,9 +6,15 @@
                     <i class="fas fa-palette me-2"></i>
                     عرض تفاصيل النكهة: {{ $flavour->name }}
                 </h5>
-                <button type="button" class="close text-white" aria-label="إغلاق" wire:click="cancel">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                {{-- {{var_dump($forceDetails)}} --}}
+                 @if(!$forceDetails)
+                
+                    <button type="button" class="close text-white" aria-label="إغلاق" wire:click="cancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                
+                @endif 
+                
             </div>
             
 

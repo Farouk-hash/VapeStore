@@ -31,34 +31,36 @@ class BillsController extends Controller
     public function show(int $id){
         $bill = Bills::with(['details','customer'])->find($id);
         $billGroupByCounts = $bill->details->groupby('inventory_source')->map->count();
-          
+        
         $detailsModified = $bill->details->map(function($detail){
             if($detail->inventory_source!=='groups'){
+
                 return [
                     'item_identity'=> $detail->inventory_source != 'liquids' ? 
-                        $detail->device->simpleDetails($detail->inventory_source)['name'] : 
-                        $detail->liquid->nicStrength->liquid->flavour->name . $detail->liquid->nicStrength->strength . ' %' , 
+                    $detail->device->simpleDetails($detail->inventory_source)['name'] : 
+                    $detail->liquid->nicStrength->liquid->flavour->name . $detail->liquid->nicStrength->strength . ' %' , 
                     'route'=> $detail->inventory_source != 'liquids' ? 
-                        route('devicesCategories.show',[
-                        $detail->device->simpleDetails($detail->inventory_source)['category'] , 
+                    route('livewire.devices.itemsDetails',[
                         $detail->device->simpleDetails($detail->inventory_source)['brand_id'] ,
+                        $detail->device->simpleDetails($detail->inventory_source)['category'] , 
                         $detail->device->simpleDetails($detail->inventory_source)['bill_details_product_id'] ,
                         ]):
-                        route('liquid.show',[$detail->liquid->nicStrength->liquid->id])
-                    ,
-                    'quantity'=>$detail->quantity , 
-                    'line_total'=>$detail->line_total
-                ];
-            }
-            else{
-                return [
-                    'item_identity'=> $detail->group->name , 
-                    'line_total'=>$detail->line_total ,
-                    'quantity'=>$detail->quantity , 
-                    'route'=>route('livewire.group-inventories',$detail->group->id),
-                ];
-            }
-        });
+                        route('livewire.details',[ 'itemID'=>$detail->liquid->nicStrength->liquid,'forceDetails'=>true])
+                        ,
+                        'quantity'=>$detail->quantity , 
+                        'line_total'=>$detail->line_total
+                    ];
+                }
+                else{
+                    return [
+                        'item_identity'=> $detail->group->name , 
+                        'line_total'=>$detail->line_total ,
+                        'quantity'=>$detail->quantity , 
+                        'route'=>route('livewire.group-inventories',$detail->group->id),
+                    ];
+                }
+            });
+            // dd($detailsModified);
         return view('dashboard.bills.details',compact('bill','detailsModified' , 'billGroupByCounts'));
     }
 

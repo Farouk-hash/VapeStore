@@ -694,7 +694,7 @@
 
 @section('content')
     <div>
-        <livewire:devices-brands.items-details.index :item-id="$itemID" :slug="$slug" />
+        <livewire:devices-brands.items-details.index :item-id="$itemID" :slug="$slug" :forceDetails="$forceDetails" />
     </div>
 
 @endsection

@@ -10,8 +10,9 @@ use Livewire\Component;
 class Details extends Component
 {
     use GetItemDetails;
-    public $coilsOhms=false ,$device; 
-    public function mount($id){
+    public $coilsOhms=false ,$device, $forceDetails; 
+    public function mount($id, $forceDetails=null){
+        $this->forceDetails=$forceDetails;
         $this->device = CoilSeries::with(['coilsOhms','brand','category','images'])
         ->where('id',$id)->first();
         // dd(

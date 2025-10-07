@@ -6,9 +6,11 @@
                 <i class="mdi mdi-pencil"></i>
                 وصف الجهاز - {{ $device->name ?? 'العلامة التجارية' }}
             </h4>
+            @if(!$forceDetails)
             <button type="button" class="close text-white" aria-label="إغلاق" wire:click="cancel">
                 <span aria-hidden="true">&times;</span>
             </button>
+            @endif
         </div>
         
         <div class="card shadow-sm border-0">

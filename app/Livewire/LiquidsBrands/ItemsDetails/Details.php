@@ -11,11 +11,13 @@ use Livewire\Component;
 class Details extends Component
 {
     public $liquid ,$images , $flavour , $selectedNicStrenghts=false; 
-    public $activeImageIndex = 0; 
-    public function mount($id){
+    public $activeImageIndex = 0,$forceDetails; 
+    public function mount($id,$forceDetails=null){
+        $this->forceDetails=$forceDetails;
         $this->flavour = Flavour::where('id',$id)->first();
         $this->images = $this->flavour->images()->pluck('url')->toArray();
     }
+   
     public function getdNicStrenghts($id){
         $this->selectedNicStrenghts = true ; 
         $liquid = LiquidNicStrength::where('liquid_id',$id)->get();

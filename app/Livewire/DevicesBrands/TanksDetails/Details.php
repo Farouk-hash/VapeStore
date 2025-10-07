@@ -10,8 +10,9 @@ use Livewire\Component;
 class Details extends Component
 {
     use GetItemDetails;
-    public $colors=false , $specifications=false ,$device ; 
-    public function mount($id){
+    public $colors=false , $specifications=false ,$device, $forceDetails ; 
+    public function mount($id, $forceDetails=null){
+        $this->forceDetails=$forceDetails;
         $this->device = Tanks::with(['speces','colors','brand','category','images','inventories'])
         ->where('id',$id)->first();
         // dd($this->device->inventories , $this->device->id , $this->device->inventories()->getBindings());

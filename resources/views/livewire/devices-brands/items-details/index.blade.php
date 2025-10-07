@@ -33,13 +33,13 @@
   
 @elseif($showDetails)
     @if($slug == 'tanks')
-        <livewire:devices-brands.tanks-details.details :id="$id" >
+        <livewire:devices-brands.tanks-details.details :id="$id" :forceDetails="$forceDetails">
     @elseif($slug =='coils-pods')
-        <livewire:devices-brands.coils-details.details :id="$id" >
+        <livewire:devices-brands.coils-details.details :id="$id" :forceDetails="$forceDetails">
     @elseif($slug == 'cartridges')
-        <livewire:devices-brands.cartridges-details.details :id="$id" >
+        <livewire:devices-brands.cartridges-details.details :id="$id" :forceDetails="$forceDetails">
     @else
-        <livewire:devices-brands.items-details.details :id="$id" >
+        <livewire:devices-brands.items-details.details :id="$id" :forceDetails="$forceDetails">
     @endif
 
 @else 

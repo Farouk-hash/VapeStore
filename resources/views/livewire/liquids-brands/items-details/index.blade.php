@@ -16,7 +16,7 @@
     <livewire:liquids-brands.items-details.inventory :id="$id" >
   
 @elseif($showDetails)
-    <livewire:liquids-brands.items-details.details :id="$id">
+    <livewire:liquids-brands.items-details.details :id="$id" :forceDetails="$forceDetails">
 
 @else 
 
@@ -31,7 +31,6 @@
         <livewire:liquids-brands.items-details.create-item :id="$brand->id">
     
     @else
-
         <!-- Statistics -->
         <div class="stats-row">
             <div class="row">

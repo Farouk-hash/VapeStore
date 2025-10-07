@@ -13,6 +13,7 @@ class Details extends Component
 
                     
     public function mount($groupId){
+        // dd('h');
         try{
             $this->group = GroupInventory::with(['details'])->findOrFail($groupId);
             $this->groupDetails = $this->group->details->map(function($detail) {
@@ -23,17 +24,19 @@ class Details extends Component
                             'source'=>$detail->source,                    
                             'name'=>"$liquidFlavor:$liquidDetails->nicotine_type-$liquidDetails->vape_style-$liquidDetails->bottle_size_ml  ml", 
                             'quantity'=>$detail->quantity,
-                            'route'=>route('liquid.show',[$detail->liquidsInventory->nicStrength->liquid->id])
+                            // 'route'=>route('liquid.show',[$detail->liquidsInventory->nicStrength->liquid->id])
+                            'route'=>route('livewire.details',[ 'itemID'=>$detail->liquidsInventory->nicStrength->liquid,'forceDetails'=>true])
+
                         ];
                     }else{
                         $devicesDetails = $detail->devicesInventory->simpleDetails($detail->source);
                         $devieName = $devicesDetails['name'] ;
                         $values = [
                             'name'=>$devieName , 'quantity'=>$detail->quantity,'source'=>$detail->source , 
-                            'route'=>route('devicesCategories.show',[
-                            $devicesDetails['category'] , 
-                            $devicesDetails['brand_id'] ,
-                            $devicesDetails['bill_details_product_id'] ,
+                            'route'=>route('livewire.devices.itemsDetails',[
+                                $devicesDetails['brand_id'] ,
+                                $devicesDetails['category'] , 
+                                $devicesDetails['bill_details_product_id'] ,
                             ])
                     ];
                     }

@@ -9,8 +9,9 @@ use Livewire\Component;
 class Details extends Component
 {
     use GetItemDetails;
-    public $variants=false   ,$device ; 
-    public function mount($id){
+    public $variants=false   ,$device, $forceDetails ; 
+    public function mount($id, $forceDetails=null){
+        $this->$forceDetails=$forceDetails;
         $this->device = Cartidge::with(['variants','brand','category','images'])->where('id',$id)->first();
         // dd($this->device->inventories);
         $this->loadAttributes('cartridges');

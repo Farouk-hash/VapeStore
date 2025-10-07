@@ -3,6 +3,7 @@
 namespace App\Livewire\LiquidsBrands\ItemsDetails;
 
 use App\Models\CommonModels\Brand;
+use App\Models\Vape\Liquid;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -11,10 +12,22 @@ class Index extends Component
 {
     
     public $showFlavorFormVariable = false , $showEditForm = false , $showInventoryForm = false , $showDetails=false ; 
-    public $brand ;
+    public $brand,$forceDetails ;
     public $id ;  
-    public function mount($itemId){
-        $this->brand = Brand::where('id',$itemId)->first();
+    public function mount($itemId ,$forceDetails=null){
+        // $this->brand = Brand::where('id',$itemId)->first();
+        $this->forceDetails = $forceDetails;
+        if(isset($forceDetails)){
+            $liquid= Liquid::with('flavour.brand')
+            ->where('id',$itemId)
+            ->first()->flavour;
+            $itemId = $liquid->id ; 
+            $this->brand = $liquid->brand;
+            $this->getDetails($itemId);
+        }else{
+            $this->brand = Brand::where('id',$itemId)->first();
+        }
+        // dd($this->brand);
     }
 
     #[On('hideFlavorFormVariable')]

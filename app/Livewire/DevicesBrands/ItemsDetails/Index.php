@@ -16,12 +16,17 @@ class Index extends Component
     
     public $showDeviceFormVariable = false , $showEditForm = false , $showInventoryForm = false , $showDetails=false ; 
     public $brand , $devices  , $brandId , $statistics=[] , $tanksStyleCounts=[] , $coilVapingStyles=[] , $cartridgeVapingStyles=[]; 
-    public  $id , $itemId , $slug ; 
+    public  $id , $itemId , $slug ,$forceDetails; 
 
-    public function mount($itemId , $slug=null){
+    public function mount($itemId , $slug=null , $forceDetails = null ){
+        $this->forceDetails=$forceDetails;
         $this->itemId = $itemId ;
         $this->slug = $slug;
         $this->initializeItems($itemId , $slug);
+        // dd($this->itemId , $slug , $forceDetails);
+        if($forceDetails){
+            $this->getDetails($forceDetails );
+        }
     }
     private function initializeItems($itemId , $slug){
         // slug == null -> all devices associated with brand-id ; 
@@ -61,6 +66,7 @@ class Index extends Component
                 ->merge(Cartidge::with(['brand','category'])->where('brand_id', $itemId)->get());
         }
     }
+
     private function loadStatistics($item){
         $items = [
             'tanks'=>[
@@ -108,6 +114,7 @@ class Index extends Component
     public function getDetails($id){
         // dd($id);
         $this->id = $id ; 
+        // dd($this->id);
         $this->showDetails = true ; 
     }
     #[On('hideDetails')]
