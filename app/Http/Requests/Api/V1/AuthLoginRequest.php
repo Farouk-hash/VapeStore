@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+class AuthLoginRequest extends FormRequest
 {
-    protected $stopOnFirstFailure=true ; 
+   
+    protected $stopOnFirstFailure = true;
+
     public function authorize(): bool
     {
         return true;
@@ -20,36 +22,34 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email'    => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
     }
 
+
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-        $guarded = $this->determineGuarded();
 
-        $remeber = $this->boolean('remeber') ; // has to be added ; 
-        $credentials  = $this->only('email' ,'password');
-        $auth = Auth::guard($guarded);
-        
-        if (! $auth->attempt($credentials, $remeber)) {
+        $credentials = $this->only('email', 'password');
+
+        if (! Auth::attempt($credentials)) {
+
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'failed'=>'خطأ في تسجيل الدخول'
+                'failed' => __('auth.failed'), 
+                // or custom: 'Login credentials are incorrect'
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
     }
 
-    protected function determineGuarded(){
-        return $this->input('guard','web');
-    }
-    
-   
+    /**
+     * Ensure user isn't locked out due to too many attempts
+     */
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
@@ -68,11 +68,9 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
+
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::lower($this->string('email')).'|'.$this->ip();
     }
 }
